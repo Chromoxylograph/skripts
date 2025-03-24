@@ -24,7 +24,7 @@ on join:
 on death of a player:
 	if attacker is a player:
         set {_attacker} to attacker
-        set health of {_attacker} to 20
+        set health of attacker to 20
         send "&6You killed a player! Your health has been restored." to attacker
 		add 1 to {killstreak.%attacker%}
 		send "{@prefix} {@you_killed_player}" to attacker
