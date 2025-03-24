@@ -1,40 +1,43 @@
+# Variables to track killstreaks
 variables:
-    {killstreak.%player%} = 0
+    {killstreak::%player's uuid%} = 0
 
 on death of player:
     if attacker is a player:
         set {_attacker} to attacker
         set health of {_attacker} to 20  # Restore health to full
-        add 1 to {killstreak.%{_attacker}%}  # Increment killstreak
+        add 1 to {killstreak::%{_attacker}'s uuid%}  # Increment killstreak
 
         # Check if the killstreak is a multiple of 5
-        if {killstreak.%{_attacker}%} is divisible by 5:
-            set {_killstreak_level} to {killstreak.%{_attacker}%} / 5
+        if {killstreak::%{_attacker}'s uuid%} is divisible by 5:
+            set {_killstreak_level} to {killstreak::%{_attacker}'s uuid%} / 5
             apply buffs to {_attacker} based on {_killstreak_level}
-            send "&aYou are on a killstreak of &e%{killstreak.%{_attacker}%}%&a! Buffs have been applied!" to {_attacker}
+            send "&aYou are on a killstreak of &e%{killstreak::%{_attacker}'s uuid%}%&a! Buffs have been applied!" to {_attacker}
         else:
-            send "&aYou are on a killstreak of &e%{killstreak.%{_attacker}%}%&a!" to {_attacker}
+            send "&aYou are on a killstreak of &e%{killstreak::%{_attacker}'s uuid%}%&a!" to {_attacker}
 
-function apply buffs to player based on number:
-    if arg-2 is 1:
-        apply speed 1 to arg-1 for 60 seconds
-        send "&bYou gained &eSpeed I&b for 60 seconds!" to arg-1
-    else if arg-2 is 2:
-        apply speed 2 to arg-1 for 60 seconds
-        apply strength 1 to arg-1 for 60 seconds
-        send "&bYou gained &eSpeed II &band &eStrength I&b for 60 seconds!" to arg-1
-    else if arg-2 is 3:
-        apply speed 2 to arg-1 for 60 seconds
-        apply strength 2 to arg-1 for 60 seconds
-        apply resistance 1 to arg-1 for 60 seconds
-        send "&bYou gained &eSpeed II&b, &eStrength II&b, and &eResistance I&b for 60 seconds!" to arg-1
-    else if arg-2 is 4 or more:
-        apply speed 3 to arg-1 for 60 seconds
-        apply strength 3 to arg-1 for 60 seconds
-        apply resistance 2 to arg-1 for 60 seconds
-        send "&bYou gained &eSpeed III&b, &eStrength III&b, and &eResistance II&b for 60 seconds!" to arg-1
+# Function to apply buffs based on killstreak level
+function apply buffs(p: player, level: number):
+    if {_level} is 1:
+        apply speed 1 to {_p} for 60 seconds
+        send "&bYou gained &eSpeed I&b for 60 seconds!" to {_p}
+    else if {_level} is 2:
+        apply speed 2 to {_p} for 60 seconds
+        apply strength 1 to {_p} for 60 seconds
+        send "&bYou gained &eSpeed II &band &eStrength I&b for 60 seconds!" to {_p}
+    else if {_level} is 3:
+        apply speed 2 to {_p} for 60 seconds
+        apply strength 2 to {_p} for 60 seconds
+        apply resistance 1 to {_p} for 60 seconds
+        send "&bYou gained &eSpeed II&b, &eStrength II&b, and &eResistance I&b for 60 seconds!" to {_p}
+    else if {_level} is 4 or more:
+        apply speed 3 to {_p} for 60 seconds
+        apply strength 3 to {_p} for 60 seconds
+        apply resistance 2 to {_p} for 60 seconds
+        send "&bYou gained &eSpeed III&b, &eStrength III&b, and &eResistance II&b for 60 seconds!" to {_p}
 
+# Reset killstreak on player death
 on death of player:
-    if {killstreak.%player%} is set:
-        send "&cYour killstreak of &e%{killstreak.%player%}% &chas ended!" to player
-        delete {killstreak.%player%}
+    if {killstreak::%player's uuid%} is set:
+        send "&cYour killstreak of &e%{killstreak::%player's uuid%}% &chas ended!" to player
+        delete {killstreak::%player's uuid%}
