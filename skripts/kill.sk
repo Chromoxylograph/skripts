@@ -4,7 +4,7 @@ options:
 #Here you can edit everything in the script.
 
 	you_killed_player: &7You killed &6%victim%&7.
-	your_killstreak_after_kill: &7Killstreak: &e%{killstreak.%attacker%}% drab&7.
+	your_killstreak_after_kill: &7Killstreak: &e%{killstreak.%attacker%}% drab- I mean, sorry, kill(s).&7.
 	you_died_with_a_killstreak: &7You died with a killstreak on &6%{killstreak.%victim%}% kills&7.
 	player_now_has_a_killstreak: &e%attacker% &aNow has a killstreak of &6%{killstreak.%attacker%}% kills.
 	
