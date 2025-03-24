@@ -38,6 +38,6 @@ function apply buffs(p: player, level: integer):
 
 # Reset killstreak on player death
 on death of player:
-    if {killstreak::%player's uuid%} is set:
-        send "&cYour killstreak of &e%{killstreak::%player's uuid%}% &chas ended!" to player
-        delete {killstreak::%player's uuid%}
+    if {killstreak::%victim's uuid%} is set:
+        send "&cYour killstreak of &e%{killstreak::%victim's uuid%}% &chas ended!" to victim
+        delete {killstreak::%victim's uuid%}
