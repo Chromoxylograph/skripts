@@ -1,38 +1,44 @@
-# Variables to track killstreaks
-variables:
-    {killstreak::%player%} = 0
+options:
+	prefix: &8[&9Killstreak&8]&r
+	
+#Here you can edit everything in the script.
 
-on death of player:
-    if attacker is a player:
+	you_killed_player: &7You killed &6%victim%&7.
+	your_killstreak_after_kill: &7Killstreak: &e%{killstreak.%attacker%}% drab&7.
+	you_died_with_a_killstreak: &7You died with a killstreak on &6%{killstreak.%victim%}% kills&7.
+	player_now_has_a_killstreak: &e%attacker% &aNow has a killstreak of &6%{killstreak.%attacker%}% kills.
+	
+	effect_type: speed
+	effect_tier: 2
+	effect_seconds: 5
+	number_between_killstreaks: 2
+	
+#----------------------------------------------------------------------------#
+#               (っ◔◡◔)っ ♥ This script is made by DoodieMan ♥                #
+#                     ♥ Don't steal credits please ♥                         #
+#----------------------------------------------------------------------------#
+
+on join:
+	if {killstreak2.%player%} is not set:
+		set {killstreak2.%player%} to {@number_between_killstreaks}
+on death of a player:
+	if attacker is a player:
         set {_attacker} to attacker
-        set health of {_attacker} to 20  # Restore health to full
-        add 1 to {killstreak::%{_attacker}%}  # Increment killstreak
-
-        # Check if the killstreak is a multiple of 5
-        if {killstreak::%{_attacker}%} mod 5 = 0:
-            set {_level} to {killstreak::%{_attacker}%} / 5
-            if {_level} = 1:
-                apply speed 1 to {_attacker} for 60 seconds
-                send "&aYou gained &eSpeed I&a for 60 seconds!" to {_attacker}
-            else if {_level} = 2:
-                apply speed 2 to {_attacker} for 60 seconds
-                apply strength 1 to {_attacker} for 60 seconds
-                send "&aYou gained &eSpeed II &aand &eStrength I&a for 60 seconds!" to {_attacker}
-            else if {_level} = 3:
-                apply speed 2 to {_attacker} for 60 seconds
-                apply strength 2 to {_attacker} for 60 seconds
-                apply resistance 1 to {_attacker} for 60 seconds
-                send "&aYou gained &eSpeed II&a, &eStrength II&a, and &eResistance I&a for 60 seconds!" to {_attacker}
-            else if {_level} >= 4:
-                apply speed 3 to {_attacker} for 60 seconds
-                apply strength 3 to {_attacker} for 60 seconds
-                apply resistance 2 to {_attacker} for 60 seconds
-                send "&aYou gained &eSpeed III&a, &eStrength III&a, and &eResistance II&a for 60 seconds!" to {_attacker}
-
-        send "&aYou are on a killstreak of &e%{killstreak::%{_attacker}%}%&a!" to {_attacker}
-
-# Reset killstreak on player death
-on death of player:
-    if {killstreak::%player%} is set:
-        send "&cYour killstreak of &e%{killstreak::%player%}% &chas ended!" to player
+        set health of {_attacker} to 20
+        send "&6You killed a player! Your health has been restored." to attacker
+		add 1 to {killstreak.%attacker%}
+		send "{@prefix} {@you_killed_player}" to attacker
+		send "{@prefix} {@your_killstreak_after_kill}" to attacker
+	if {killstreak.%victim%} is set:
+		send "{@prefix} {@you_died_with_a_killstreak}" to victim
+		delete {killstreak.%victim%}
+	if {killstreak.%attacker%} is {killstreak2.%attacker%}:
+		broadcast "{@prefix} {@player_now_has_a_killstreak}"
+		add {@number_between_killstreaks} to {killstreak2.%attacker%}
+		apply potion of {@effect_type} of tier {@effect_tier} to the attacker for {@effect_seconds} seconds
+	delete {killstreak.%victim%}
+	set {killstreak2.%victim%} to {@number_between_killstreaks}
+	
+#----------------------------------------------------------------------------#
+#----------------------------------------------------------------------------#
         delete {killstreak::%player%}
